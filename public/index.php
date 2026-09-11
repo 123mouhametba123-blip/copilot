@@ -3,7 +3,15 @@ declare(strict_types=1);
 if (PHP_SAPI === 'cli-server') {
 	$requestedFile = __DIR__ . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 	if (is_file($requestedFile)) {
-		$mimeType = mime_content_type($requestedFile) ?: 'application/octet-stream';
+		$mimeType = match (strtolower(pathinfo($requestedFile, PATHINFO_EXTENSION))) {
+			'css' => 'text/css; charset=UTF-8',
+			'js' => 'application/javascript; charset=UTF-8',
+			'svg' => 'image/svg+xml',
+			'png' => 'image/png',
+			'jpg', 'jpeg' => 'image/jpeg',
+			'webp' => 'image/webp',
+			default => 'application/octet-stream',
+		};
 		header('Content-Type: ' . $mimeType);
 		readfile($requestedFile);
 		exit;
