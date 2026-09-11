@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "until php database/migrate.php; do echo 'MySQL pas encore pret, nouvelle tentative...'; sleep 2; done && php database/seed.php && php -S 0.0.0.0:8000 -t public public/index.php"
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: reservation_salles
+      MYSQL_USER: reservation
+      MYSQL_PASSWORD: reservation
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ureservation", "-preservation"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  mysql_data:
