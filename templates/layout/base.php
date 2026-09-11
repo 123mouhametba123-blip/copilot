@@ -1,0 +1,3 @@
+<?php $title = $title ?? 'Reservation salles'; ?><!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title><?= htmlspecialchars($title) ?></title><link rel="stylesheet" href="/assets/style.css"></head>
+<body><header><a class="brand" href="/">Campus Rooms</a><nav><a href="/salles">Salles</a><a href="/reservations">Reservations</a><a class="button" href="/reservations/create">Nouvelle reservation</a></nav></header><main><?= $content ?? '' ?></main><footer>Gestion universitaire des espaces</footer></body></html>

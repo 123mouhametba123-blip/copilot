@@ -1,0 +1,1 @@
+<?php ob_start(); ?><section class="section narrow"><p class="eyebrow">Erreur 404</p><h1>Page introuvable</h1><a class="button" href="/">Retour a l'accueil</a></section><?php $content = ob_get_clean(); require dirname(__DIR__) . '/layout/base.php';

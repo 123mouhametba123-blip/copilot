@@ -1,0 +1,1 @@
+<?php ob_start(); ?><section class="section narrow"><p class="eyebrow">Erreur</p><h1>Une erreur est survenue</h1><p><?= htmlspecialchars($message ?? '') ?></p></section><?php $content = ob_get_clean(); require dirname(__DIR__) . '/layout/base.php';
