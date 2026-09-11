@@ -15,7 +15,11 @@ use DateTimeImmutable;
 final class ReservationController
 {
     public function __construct(private ReservationRepositoryInterface $reservations, private SalleRepositoryInterface $salles, private ReservationValidator $validator, private CreerReservationService $creer, private AnnulerReservationService $annuler, private View $view) {}
-    public function index(): string { return $this->view->render('reservation/index', ['reservations' => $this->reservations->all(), 'salles' => $this->salles->all()]); }
+    public function index(): string
+    {
+        $salleId = filter_input(INPUT_GET, 'salle_id', FILTER_VALIDATE_INT) ?: null;
+        return $this->view->render('reservation/index', ['reservations' => $this->reservations->all($salleId), 'salles' => $this->salles->all(), 'selectedSalle' => $salleId]);
+    }
     public function show(int $id): string { $reservation = $this->reservations->find($id); if (!$reservation) return $this->view->render('error/404'); return $this->view->render('reservation/show', compact('reservation')); }
     public function create(): string { return $this->view->render('reservation/form', ['salles' => $this->salles->all(), 'errors' => [], 'data' => []]); }
     public function store(): string

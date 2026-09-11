@@ -19,7 +19,8 @@ final class Application
         if ($result[0] === Dispatcher::NOT_FOUND) { http_response_code(404); echo $this->container->get(\App\View\View::class)->render('error/404'); return; }
         if ($result[0] === Dispatcher::METHOD_NOT_ALLOWED) { http_response_code(405); header('Allow: ' . implode(', ', $result[1])); echo $this->container->get(\App\View\View::class)->render('error/405'); return; }
         [$handler, $vars] = [$result[1], $result[2]];
-        try { echo $this->container->get($handler[0])->{$handler[1]}(...array_values($vars)); }
+        $arguments = array_map(static fn (string $value): int|string => ctype_digit($value) ? (int) $value : $value, array_values($vars));
+        try { echo $this->container->get($handler[0])->{$handler[1]}(...$arguments); }
         catch (Throwable $exception) { http_response_code(500); echo $this->container->get(\App\View\View::class)->render('error/500', ['message' => $exception->getMessage()]); }
     }
 }
